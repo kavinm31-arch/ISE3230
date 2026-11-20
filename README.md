@@ -27,3 +27,13 @@ for i in candidate:
 for i in candidate:
   m.addConstr(gp.quicksum(x[i,s] * hours[s] for s in shift) <= max[i] * y[i])
 
+# Add constraints for staffing requirments (Kavin)
+
+# Add constraints for employee availability (Kavin)
+
+# Add constraints for daily shift limits (Kavin)
+
+# Optimize model (Kavin)
+
+
+
