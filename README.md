@@ -126,11 +126,11 @@ for i in candidate:
 
 # Add constraints for min working hours
 for i in candidate:
-  m.addConstr(gp.quicksum(x[i,s] * hours[s] for s in shift) >= min[i] * y[i])
+  m.addConstr(gp.quicksum(x[i,s] * hours[s] for s in shift) >= min_hours[i] * y[i])
 
 # Add constraints for max working hours
 for i in candidate:
-  m.addConstr(gp.quicksum(x[i,s] * hours[s] for s in shift) <= max[i] * y[i])
+  m.addConstr(gp.quicksum(x[i,s] * hours[s] for s in shift) <= max_hours[i] * y[i])
 
 # Add constraints for staffing requirments (Kavin)
 
