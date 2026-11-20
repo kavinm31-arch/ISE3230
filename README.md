@@ -5,7 +5,7 @@ from gurobipy import GRB
 m = gp.Model("hiring_schedule")
 m.Params.LogToConsole = 0
 
-# variables to read in: for each candidate: wage, hiring_cost, min | for each shift: hours
+# variables to read in: for each candidate: wage, hiring_cost, min | for each shift: hours-xinxin
 candidate = range(1, n_candidates + 1)
 shift = range(1, n_shifts + 1)
 
