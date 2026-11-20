@@ -112,10 +112,8 @@ for s in shift:
 
 print(f"Loaded {n_candidates} candidates and {n_shifts} shifts.")
 
-# variables to read in: for each candidate: wage, hiring_cost, min | for each shift: hours, required_employees | employee availability - xinxin
-
-y = m.addVars(candidate, lb=0, vtype=GRB.BINARY, name="hiring")
-x = m.addVars(candidate, shift, vtype=GRB.BINARY, name="scheduling")
+y = m.addVars(n_candidates, lb=0, vtype=GRB.BINARY, name="hiring")
+x = m.addVars(n_candidates, n_shifts, vtype=GRB.BINARY, name="scheduling")
 
 m.setObjective(gp.quicksum(x[i, s]* wage[i] * hours[s] for i in candidate for s in shift) + gp.quicksum(y[i]*hiring_cost[i] for i in candidate), GRB.MINIMIZE)
 
