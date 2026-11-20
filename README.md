@@ -5,6 +5,25 @@ from gurobipy import GRB
 m = gp.Model("hiring_schedule")
 m.Params.LogToConsole = 0
 
-y = m.addVars(18, lb=0, vtype=GRB.INTEGER, name="y")
+# variables to read in: for each candidate: wage, hiring_cost, min | for each shift: hours
+candidate = range(1, n_candidates + 1)
+shift = range(1, n_shifts + 1)
 
-m.setObjective(, GRB.MINIMIZE)
+y = m.addVars(candidate, lb=0, vtype=GRB.BINARY, name="hiring")
+x = m.addVars(candidate, shift, vtype=GRB.BINARY, name="scheduling")
+
+m.setObjective(gp.quicksum(x[i, s]* wage[i] * hours[s] for i in candidate for s in shift) + gp.quicksum(y[i]*hiring_cost[i] for i in candidate), GRB.MINIMIZE)
+
+# Add constraints for hiring and scheduling (cannont schedule if a candidate is not hiried)
+for i in candidate:
+  for s in shift:
+    m.addConstr(x[i,s] <= y[i])
+
+# Add constraints for min working hours
+for i in candidate:
+  m.addConstr(gp.quicksum(x[i,s] * hours[s] for s in shift) >= min[i] * y[i])
+
+# Add constraints for max working hours
+for i in candidate:
+  m.addConstr(gp.quicksum(x[i,s] * hours[s] for s in shift) <= max[i] * y[i])
+
