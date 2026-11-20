@@ -32,9 +32,6 @@ availability_table = availability_table.set_index("Employee ID")
 candidate = employees.index.tolist()
 shift = shifts.index.tolist()
 
-n_candidates = len(candidate)
-n_shifts = len(shift)
-
 # Employee parameters.
 wage = employees["Hourly wage (USD)"].to_dict()
 hiring_cost = employees["Weekly hiring cost (USD)"].to_dict()
@@ -112,8 +109,8 @@ for s in shift:
 
 print(f"Loaded {n_candidates} candidates and {n_shifts} shifts.")
 
-y = m.addVars(n_candidates, lb=0, vtype=GRB.BINARY, name="hiring")
-x = m.addVars(n_candidates, n_shifts, vtype=GRB.BINARY, name="scheduling")
+y = m.addVars(candidate, lb=0, vtype=GRB.BINARY, name="hiring")
+x = m.addVars(candidate, shift, vtype=GRB.BINARY, name="scheduling")
 
 m.setObjective(gp.quicksum(x[i, s]* wage[i] * hours[s] for i in candidate for s in shift) + gp.quicksum(y[i]*hiring_cost[i] for i in candidate), GRB.MINIMIZE)
 
