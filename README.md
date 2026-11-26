@@ -144,10 +144,8 @@ for i in candidate:
 
 # Optimize model (Kavin)
 m.optimize()
-
 if m.Status == GRB.OPTIMAL:
     print(f"Total weekly cost: ${m.ObjVal:,.2f}")
-
     for i in candidate:
         if y[i].X > 0.5:
             assigned = [s for s in shift if x[i,s].X > 0.5]
