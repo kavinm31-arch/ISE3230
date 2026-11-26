@@ -128,12 +128,32 @@ for i in candidate:
   m.addConstr(gp.quicksum(x[i,s] * hours[s] for s in shift) <= max_hours[i] * y[i])
 
 # Add constraints for staffing requirments (Kavin)
+for s in shift:
+    m.addConstr(gp.quicksum(x[i,s] for i in candidate) >= required_employees[s])
 
 # Add constraints for employee availability (Kavin)
+for i in candidate:
+    for s in shift:
+        m.addConstr(x[i,s] <= availability[i,s])
 
 # Add constraints for daily shift limits (Kavin)
+for i in candidate:
+    for d in day_shifts:
+        m.addConstr(gp.quicksum(x[i,s] for s in day_shifts[d]) <= 1)
+
 
 # Optimize model (Kavin)
+m.optimize()
 
+if m.Status == GRB.OPTIMAL:
+    print(f"Total weekly cost: ${m.ObjVal:,.2f}")
+
+    for i in candidate:
+        if y[i].X > 0.5:
+            assigned = [s for s in shift if x[i,s].X > 0.5]
+            total_hours = sum(hours[s] for s in assigned)
+            print(f"{i}: {total_hours} hours, shifts {assigned}")
+else:
+    print(f"No optimal solution found (status {m.Status})")
 
 
