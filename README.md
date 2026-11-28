@@ -112,7 +112,13 @@ print(f"Loaded {len(candidate)} candidates and {len(shift)} shifts.")
 y = m.addVars(candidate, lb=0, vtype=GRB.BINARY, name="hiring")
 x = m.addVars(candidate, shift, vtype=GRB.BINARY, name="scheduling")
 
-m.setObjective(gp.quicksum(x[i, s]* wage[i] * hours[s] for i in candidate for s in shift) + gp.quicksum(y[i]*hiring_cost[i] for i in candidate), GRB.MINIMIZE)
+m.setObjective(
+    gp.quicksum(x[i,s] * wage[i] * hours[s]
+                for i in candidate for s in shift)
+    + gp.quicksum(y[i] * hiring_cost[i]
+                  for i in candidate),
+    GRB.MINIMIZE
+)
 
 # Add constraints for hiring and scheduling (cannont schedule if a candidate is not hiried)
 for i in candidate:
