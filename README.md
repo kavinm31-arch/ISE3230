@@ -107,7 +107,7 @@ for s in shift:
         required_employees[s]
     ), f"Not enough available employees for {s}"
 
-print(f"Loaded {n_candidates} candidates and {n_shifts} shifts.")
+print(f"Loaded {len(candidate)} candidates and {len(shift)} shifts.")
 
 y = m.addVars(candidate, lb=0, vtype=GRB.BINARY, name="hiring")
 x = m.addVars(candidate, shift, vtype=GRB.BINARY, name="scheduling")
